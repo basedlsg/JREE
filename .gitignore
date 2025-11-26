@@ -51,8 +51,7 @@ frontend/.vite/
 *.log
 
 # Data files (large)
-data/transcripts/
-data/chunks/
+data/
 *.jsonl
 *.parquet
 
