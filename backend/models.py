@@ -17,10 +17,12 @@ class SearchRequest(BaseModel):
 class QuoteResult(BaseModel):
     """A single quote result from search."""
 
-    text: str = Field(..., description="The quote text")
-    episode_number: int = Field(..., description="JRE episode number")
+    text: str = Field(..., description="The full context text")
+    highlight: str | None = Field(default=None, description="Key quote/excerpt from the text")
+    episode_number: int = Field(..., description="JRE episode number (0 if unknown)")
     episode_title: str = Field(..., description="Episode title")
     guest: str = Field(..., description="Guest name(s)")
+    youtube_id: str | None = Field(default=None, description="YouTube video ID")
     timestamp: str | None = Field(default=None, description="Timestamp in episode if available")
     score: float = Field(..., ge=0, le=1, description="Relevance score")
     chunk_id: str = Field(..., description="Unique identifier for this chunk")

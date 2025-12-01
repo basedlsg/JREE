@@ -2,9 +2,11 @@
 
 export interface QuoteResult {
   text: string;
+  highlight: string | null;
   episode_number: number;
   episode_title: string;
   guest: string;
+  youtube_id: string | null;
   timestamp: string | null;
   score: number;
   chunk_id: string;

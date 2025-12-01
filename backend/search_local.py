@@ -3,6 +3,7 @@
 This provides a fully local alternative to Pinecone + Cohere.
 """
 
+import math
 import time
 from pathlib import Path
 
@@ -79,16 +80,17 @@ def search_quotes_local(request: SearchRequest) -> SearchResponse:
             document = results["documents"][0][i] if results["documents"] else ""
             distance = results["distances"][0][i] if results["distances"] else 0
 
-            # Convert distance to similarity score (ChromaDB uses L2 distance by default)
-            # For cosine distance: score = 1 - distance
-            # For L2 distance: score = 1 / (1 + distance)
-            score = 1 / (1 + distance)
+            # Convert L2 distance to similarity score
+            # Using exponential decay for better score distribution
+            score = math.exp(-distance / 10)
 
             result = QuoteResult(
                 text=document,
+                highlight=metadata.get("highlight") or None,
                 episode_number=metadata.get("episode_number", 0),
                 episode_title=metadata.get("episode_title", "Unknown"),
                 guest=metadata.get("guest", "Unknown"),
+                youtube_id=metadata.get("youtube_id") or None,
                 timestamp=None,
                 score=score,
                 chunk_id=chunk_id,

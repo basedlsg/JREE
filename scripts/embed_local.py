@@ -100,10 +100,10 @@ def main():
         settings=Settings(anonymized_telemetry=False),
     )
 
-    # Create or get collection
+    # Create or get collection with cosine distance for better semantic search
     collection = client.get_or_create_collection(
         name=COLLECTION_NAME,
-        metadata={"description": "JRE podcast quotes"},
+        metadata={"hnsw:space": "cosine", "description": "JRE podcast quotes"},
     )
 
     existing_count = collection.count()
@@ -128,6 +128,8 @@ def main():
                 "guest": chunk["guest"],
                 "chunk_index": chunk["chunk_index"],
                 "total_chunks": chunk["total_chunks"],
+                "highlight": chunk.get("highlight", ""),
+                "youtube_id": chunk.get("youtube_id", ""),
             }
             for chunk in batch
         ]
